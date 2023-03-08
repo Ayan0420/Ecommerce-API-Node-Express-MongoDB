@@ -1,0 +1,27 @@
+{
+  "name": "capstone-2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/b247-cabuntucan/s42-s46-capstone-2/capstone-2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/b247-cabuntucan/s42-s46-capstone-2/capstone-2/issues"
+  },
+  "homepage": "https://gitlab.com/b247-cabuntucan/s42-s46-capstone-2/capstone-2#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.1"
+  }
+}
