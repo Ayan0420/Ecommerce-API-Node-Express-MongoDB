@@ -7,7 +7,7 @@ const port = 5000;
 
 //External Routes
 const userRoutes = require('./routes/userRoutes');
-// const productRoutes = require('./routes/productRoutes');
+const productRoutes = require('./routes/productRoutes');
 
 //connect to our database
 mongoose.connect('mongodb://zuitt-bootcamp:password12345@ac-sttbgzp-shard-00-00.vgg4yb3.mongodb.net:27017,ac-sttbgzp-shard-00-01.vgg4yb3.mongodb.net:27017,ac-sttbgzp-shard-00-02.vgg4yb3.mongodb.net:27017/ecommerce-api-capstone2?ssl=true&replicaSet=atlas-6bcz5h-shard-0&authSource=admin&retryWrites=true&w=majority', {
@@ -24,6 +24,6 @@ app.use(cors()); //cross origin resource sharing to allow this application to ac
 
 // Main Routes
 app.use("/users", userRoutes);
-// app.use("/products", productRoutes);
+app.use("/products", productRoutes);
 
 app.listen(port, () => console.log(`API is now online on port ${port}`));
