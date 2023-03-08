@@ -17,13 +17,13 @@ module.exports.registerUser = (reqBody) => {
 
     return newUser.save().then((user, error) => {
         if(error) {
-            messages = {
+            let messages = {
                 message: "There is an error registering user"
             }
             console.log(error)
             return messages
         } else {
-            messages = {
+            let messages = {
                 message: `Successfully added user ${user.firstName} ${user.lastName}`
             }
             return messages
