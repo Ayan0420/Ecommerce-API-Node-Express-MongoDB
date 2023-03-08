@@ -38,15 +38,7 @@ const userSchema = mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Product"
             },
-
-            productName: {
-                type: String
-            },
-
-            price: {
-                type: Number
-            },
-
+            
             quantity: {
                 type: Number
             },

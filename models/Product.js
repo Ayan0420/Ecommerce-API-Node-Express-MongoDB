@@ -38,10 +38,6 @@ const productSchema = mongoose.Schema({
                 ref: "User"
             },
 
-            username: {
-                type: String
-            },
-
             rating: {
                 type: Number
             },
