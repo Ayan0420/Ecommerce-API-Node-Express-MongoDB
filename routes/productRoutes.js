@@ -25,5 +25,41 @@ router.get('/active', (req, res) => {
     productController.getAllActiveProducts().then(resultFromController => res.send(resultFromController));
 });
 
+//Retrieve a singe product
+router.get('/:productId/details', (req, res) => {
+    productController.getProduct(req.params).then(resultFromController => res.send(resultFromController));
+});
+
+//Update product information
+router.put('/:productId/update', auth.verify, (req, res) => {
+    const data = {
+        product: req.body,
+        isAdmin: auth.decode(req.headers.authorization).isAdmin
+    };
+
+    productController.updateProduct(req.params, data).then(resultFromController => res.send(resultFromController));
+});
+
+
+//Archive product
+router.put('/:productId/archive', auth.verify, (req, res) => {
+    const data = {
+        productId: req.params.productId,
+        isAdmin: auth.decode(req.headers.authorization).isAdmin
+    };
+
+    productController.archiveProduct(data).then(resultFromController => res.send(resultFromController));
+});
+
+//Create order
+router.post('/:productId/check-out', auth.verify, (req, res) => {
+    let data = {
+        userId: auth.decode(req.headers.authorization).id,
+        orderQuantity: req.body.quantity 
+    };
+
+    productController.createOrder(req.params, data).then(resultFromController => res.send(resultFromController));
+})
+
 
 module.exports = router;

@@ -15,4 +15,10 @@ router.post('/login', (req, res) => {
     userController.loginUser(req.body).then(resultFromController => res.send(resultFromController));
 });
 
+//Retrieve a user
+router.get('/:userId/details', (req, res) => {
+    userController.getUser(req.params).then(resultFromController => res.send(resultFromController));
+});
+
+
 module.exports = router;
