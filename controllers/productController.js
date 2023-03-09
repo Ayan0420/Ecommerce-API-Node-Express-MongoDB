@@ -159,7 +159,7 @@ module.exports.archiveProduct = (data) => {
     }).catch(error => console.log(error));   
 };
 
-//Create order
+//Create order (this code will be refactored later when we add our cart)
 module.exports.createOrder = async (reqParams, data) => {
 
     //retrieve the product price

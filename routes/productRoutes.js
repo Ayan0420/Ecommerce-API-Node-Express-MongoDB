@@ -51,7 +51,9 @@ router.put('/:productId/archive', auth.verify, (req, res) => {
     productController.archiveProduct(data).then(resultFromController => res.send(resultFromController));
 });
 
-//Create order
+
+
+//Create order (this code will be refactored later when we add our cart)
 router.post('/:productId/check-out', auth.verify, (req, res) => {
     let data = {
         userId: auth.decode(req.headers.authorization).id,
