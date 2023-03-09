@@ -160,10 +160,10 @@ module.exports.archiveProduct = (data) => {
 };
 
 //Create order (this code will be refactored later when we add our cart)
-module.exports.createOrder = async (reqParams, data) => {
+module.exports.createOrder = async (data) => {
 
     //retrieve the product price
-    let price = await Product.findById(reqParams.productId).then((productData, error) => {
+    let price = await Product.findById(data.productId).then((productData, error) => {
         if(error){
             console.log("Error from price var: " + error);
         } else {
@@ -179,7 +179,7 @@ module.exports.createOrder = async (reqParams, data) => {
         userId: data.userId,
         products: [
             {
-                productId: reqParams.productId,
+                productId: data.productId,
                 quantity: data.orderQuantity,
                 subTotal: subTotal(price, data.orderQuantity),
             }
