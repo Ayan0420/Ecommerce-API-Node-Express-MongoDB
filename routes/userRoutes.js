@@ -1,3 +1,4 @@
+const { verify } = require('crypto');
 const express = require('express');
 const router = express.Router();
 
@@ -13,6 +14,16 @@ router.post('/register', (req, res) => {
 //Login user
 router.post('/login', (req, res) => {
     userController.loginUser(req.body).then(resultFromController => res.send(resultFromController));
+});
+
+//Retrieve all users
+router.get('/all', auth.verify, (req, res) => {
+    const data = {
+        isAdmin: auth.decode(req.headers.authorization).isAdmin,
+    };
+
+    userController.getAllUsers(data).then(resultFromController => res.send(resultFromController));
+
 });
 
 //Retrieve a user

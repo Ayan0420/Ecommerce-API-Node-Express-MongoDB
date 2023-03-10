@@ -163,16 +163,16 @@ module.exports.getOrders = (data) => {
 
 module.exports.getAllOrders = (data) => {
     if(data.isAdmin == true){
-        return Order.find({}).populate({path: "userId", select: ["_id", "firstName", "lastName", "email", "mobileNo"]}).populate({path: "products", populate: {path: "productId", select: ["_id", "productName", "description", "price"]}}).sort({"purchasedOn": -1}).then((orderData, error) => {
+        return Order.find({}).populate({path: "userId", select: ["_id", "firstName", "lastName", "email", "mobileNo"]}).populate({path: "products", populate: {path: "productId", select: ["_id", "productName", "description", "price"]}}).sort({"purchasedOn": -1}).then((ordersData, error) => {
             if(error){
                 let msg = {
                     response: false,
                     error: "Error obtaining orders.",
                     };
-                console.log("error from get all order: " + error);
+                console.log("error from get all orders: " + error);
                 return msg;
             } else {
-                return orderData
+                return ordersData
             }
         });
     }

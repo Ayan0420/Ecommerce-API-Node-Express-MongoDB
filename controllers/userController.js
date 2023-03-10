@@ -95,6 +95,47 @@ module.exports.loginUser = (reqBody) => {
     });
 };
 
+//Retrive all users
+module.exports.getAllUsers = (data) => {
+    if(data.isAdmin){
+        return User.find({}).then((usersData, error) => {
+            if(error){
+                let msg = {
+                    response: false,
+                    error: "Error obtaining users.",
+                    };
+                console.log("error from get all users: " + error);
+                return msg
+            } else {
+                let data = []; 
+                usersData.forEach(item => {
+                    let userData = {
+                        _id: item._id,
+                        firstName: item.firstName,
+                        lastName: item.lastName,
+                        email: item.email,
+                        password: "",
+                        isAdmin: item.isAdmin,
+                        mobileNo: item.mobileNo,
+                        cartItems: item.cartItems,
+                    }
+                    data.push(userData)
+                });
+
+                return data
+            }
+        })
+    }
+
+    //If the user is not an admin
+    let msg = Promise.resolve({
+        error: "User must be an admin to access this!"
+    })
+    return msg.then(value => {
+        return value;
+    })
+};
+
 //Retrieve a user
 module.exports.getUser = (reqParams) => {
 
