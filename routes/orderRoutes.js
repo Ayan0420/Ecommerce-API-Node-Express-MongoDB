@@ -17,5 +17,23 @@ router.post('/check-out', auth.verify, (req, res) => {
     orderController.createOrder(data).then(resultFromController => res.send(resultFromController));
 })
 
+//Retrieve user's orders
+router.get('/my-orders', auth.verify, (req, res) => {
+    const data = {
+        userId: auth.decode(req.headers.authorization).id
+    };
+
+    orderController.getOrders(data).then(resultFromController => res.send(resultFromController));
+});
+
+//Retrieve all orders
+router.get('/', auth.verify, (req, res) => {
+    const data = {
+        isAdmin: auth.decode(req.headers.authorization).isAdmin
+    };
+
+    orderController.getAllOrders(data).then(resultFromController => res.send(resultFromController));
+});
+
 
 module.exports = router;

@@ -2,7 +2,7 @@
 const Product = require('../models/Product');
 const Order = require('../models/Order')
 
-//Create order (this code will be refactored later when we add our cart)
+//Create order (needs refactoring in relation to add our cart)
 module.exports.createOrder = async (data) => {
     //initialize the array for the ordered products with its price, quantity and subTotal
     let orderedProductsArray = [];
@@ -130,3 +130,58 @@ module.exports.createOrder = async (data) => {
     }
 };
 
+module.exports.getOrders = (data) => {
+    return Order.find({userId: data.userId}).populate({path: "products", populate: {path: "productId", select: ["_id", "productName", "description", "price"]}}).sort({"purchasedOn": -1}).then((orderData, error) => {
+        if(error){
+            let msg = {
+                response: false,
+                error: "Error obtaining user orders.",
+                };
+            console.log("error from find order: " + error);
+            return msg;
+        } else {
+            if(orderData.length == 0){
+                let msg = {
+                    response: false,
+                    message: "User does not have any orders.",
+                    };
+                return msg;
+            } else {
+                return orderData;
+
+            }
+        }
+    }).catch(error => {
+        let msg = {
+            response: false,
+            error: "Error obtaining user orders.",
+            };
+        console.log("error from find order: " + error);
+        return msg;
+    });
+};
+
+module.exports.getAllOrders = (data) => {
+    if(data.isAdmin == true){
+        return Order.find({}).populate({path: "userId", select: ["_id", "firstName", "lastName", "email", "mobileNo"]}).populate({path: "products", populate: {path: "productId", select: ["_id", "productName", "description", "price"]}}).sort({"purchasedOn": -1}).then((orderData, error) => {
+            if(error){
+                let msg = {
+                    response: false,
+                    error: "Error obtaining orders.",
+                    };
+                console.log("error from get all order: " + error);
+                return msg;
+            } else {
+                return orderData
+            }
+        });
+    }
+
+    //If the user is not an admin
+    let msg = Promise.resolve({
+        error: "User must be an admin to access this!"
+    });
+    return msg.then(value => {
+        return value;
+    });
+};
