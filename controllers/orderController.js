@@ -48,7 +48,7 @@ module.exports.createOrder = async (data) => {
     if(orderedProductsArray == null){
         let msg = {
             response: false,
-            error: "Some of the products you are trying to purchase is not availabe or doesn't have a stock.",
+            error: "Some products doesn't have enough stock or is not available.",
             };
         return msg;
     } else {
@@ -112,7 +112,7 @@ module.exports.createOrder = async (data) => {
                         productData.stocks -= data.orderQuantity[i];
 
                         productData.save().then((result) => {
-                            console.log(`Stocks updated successfully: decrease ${result.productName} stocks to ${result.stocks}`);
+                            console.log(`Stocks updated successfully: decreased ${result.productName} stocks to ${result.stocks}`);
                         }).catch(error => console.log("Error from updating stocks: " + error));
 
                     }).catch(error => console.log("Error from updating stocks: " + error));

@@ -28,6 +28,11 @@ const orderSchema = mongoose.Schema({
         type: Number
     },
 
+    status: {
+        type: String,
+        default: "Pending"
+    },
+
     purchasedOn: {
         type: Date,
         default: new Date()

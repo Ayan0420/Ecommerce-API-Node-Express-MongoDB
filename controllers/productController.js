@@ -66,7 +66,7 @@ module.exports.getProduct = (reqParams) => {
     }).catch(error => {
         let msg = {
             response: false,
-            message: `Product ID does not exist.`,
+            error: `Product ID does not exist.`,
         };
         console.log(error);
         return msg;
@@ -105,7 +105,7 @@ module.exports.updateProduct = (reqParams, data) => {
         }).catch(error => {
             let msg = {
                 response: false,
-                message: `Product ID does not exist.`,
+                error: `Product ID does not exist.`,
             };
             console.log(error);
             return msg;
@@ -144,7 +144,7 @@ module.exports.archiveProduct = (data) => {
         }).catch(error => {
             let msg = {
                 response: false,
-                message: `Product ID does not exist.`,
+                error: `Product ID does not exist.`,
             };
             console.log(error);
             return msg;

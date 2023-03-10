@@ -38,9 +38,20 @@ const userSchema = mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Product"
             },
+
+            productName: {
+                type: String,
+                required: [true, "Product Name is required!"],
+            },
             
+            price: {
+                type: Number,
+                required: [true, "Product Price is required!"],
+            },
+
             quantity: {
-                type: Number
+                type: Number,
+                required: [true, "Product Quantity is required!"],
             },
 
             subTotal: {

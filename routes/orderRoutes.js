@@ -8,8 +8,8 @@ const orderController = require('../controllers/orderController');
 
 //Create order (this code will be refactored later when we add our cart)
 router.post('/check-out', auth.verify, (req, res) => {
-    let data = {
-        productId: req.body.productId,
+    const data = {
+        productId: req.body.productId, //this is an array data type
         userId: auth.decode(req.headers.authorization).id,
         orderQuantity: req.body.quantity 
     };
