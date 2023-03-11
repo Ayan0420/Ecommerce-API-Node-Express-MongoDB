@@ -98,7 +98,7 @@ module.exports.loginUser = (reqBody) => {
 //Retrive all users
 module.exports.getAllUsers = (data) => {
     if(data.isAdmin){
-        return User.find({}).then((usersData, error) => {
+        return User.find({}).sort({"_id": -1}).then((usersData, error) => {
             if(error){
                 let msg = {
                     response: false,

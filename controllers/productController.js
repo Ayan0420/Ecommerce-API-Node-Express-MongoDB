@@ -36,16 +36,32 @@ module.exports.addProduct = (data) => {
 
 //Retrieve all products
 module.exports.getAllProducts = () => {
-    return Product.find({}).then(result => {
+    return Product.find({}).sort({"createdOn": -1}).then(result => {
         return result;
     }).catch(error => console.log(error));
 };
 
 //Retrieve all active products
 module.exports.getAllActiveProducts = () => {
-    return Product.find({isActive: true}).then(result => {
-        return result;
-    }).catch(error => console.log(error))
+    return Product.find({isActive: true}).sort({"createdOn": -1}).then(result => {
+        if(result == null){
+            let msg = {
+                response: false,
+                error: "There is no product in our database.",
+            };
+            console.log(error);
+            return msg;
+        } else {
+            return result;
+        }
+    }).catch(error => {
+        let msg = {
+            response: false,
+            error: `Product not found.`,
+        };
+        console.log(error);
+        return msg;
+    })
 };
 
 //Retrieve a product
@@ -56,7 +72,8 @@ module.exports.getProduct = (reqParams) => {
         } else {
             if(result == null){
                 msg = {
-                    error: "Product not found"
+                    response: false,
+                    error: "Product ID does not exist."
                 }
                 return msg
             } else {
@@ -66,7 +83,7 @@ module.exports.getProduct = (reqParams) => {
     }).catch(error => {
         let msg = {
             response: false,
-            error: `Product ID does not exist.`,
+            error: "Product ID does not exist.",
         };
         console.log(error);
         return msg;
