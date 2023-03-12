@@ -272,7 +272,7 @@ module.exports.addToCart = async (data) => {
                 } else {
                     let msg = {
                         message: "Added to cart successfully!",
-                        itemAddedToCart: productAddedToCart
+                        itemAddedToCart: result.cartItems
                     }
                     console.log(result); //for testing/debugging
                     return msg;
