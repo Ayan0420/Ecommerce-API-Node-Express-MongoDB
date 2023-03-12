@@ -137,7 +137,7 @@ module.exports.getAllUsers = (data) => {
 };
 
 //Retrieve a user
-module.exports.getUser = (reqParams) => {
+module.exports.getUser = (reqParams, isAdmin) => {
 
     return User.findById(reqParams.userId).then((userData, error) => {
         if(error){
@@ -147,15 +147,21 @@ module.exports.getUser = (reqParams) => {
             console.log(error)
             return msg
         } else {
-            let data = {
-                id: userData.id,
-                firstName: userData.firstName,
-                lastName: userData.lastName,
-                email: userData.email,
-                mobileNo: userData.mobileNo
+            if(isAdmin != null && isAdmin){
+                let data = userData;
+                return data;
+            } else {
+                let data = {
+                    id: userData.id,
+                    firstName: userData.firstName,
+                    lastName: userData.lastName,
+                    email: userData.email,
+                    mobileNo: userData.mobileNo
+                }
+                return data;
             }
 
-            return data
+            
         }
     }).catch(error => {
         let msg = {
