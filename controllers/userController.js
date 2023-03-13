@@ -25,6 +25,7 @@ module.exports.registerUser = async (reqBody) => {
             lastName: reqBody.lastName,
             email: reqBody.email,
             mobileNo: reqBody.mobileNo,
+            address: reqBody.address,
             password: bcrypt.hashSync(reqBody.password, 10), // to encrypt the password
             cartItems: []
         });
@@ -32,26 +33,37 @@ module.exports.registerUser = async (reqBody) => {
         return newUser.save().then((userData, error) => {
             if(error) {
                 let msg = {
-                    message: "There is an error registering user"
+                    response: false,
+                    error: "There is an error registering user"
                 }
                 console.log(error)
                 return msg
             } else {
                 let msg = {
-                    message: `Successfully added user ${userData.firstName} ${userData.lastName}`
+                    message: `Successfully added user ${userData.firstName} ${userData.lastName}`,
+                    userData: {
+                        id: userData._id,
+                        firstName: userData.firstName,
+                        lastName: userData.lastName,
+                        email: userData.email,
+                        mobileNo: userData.mobileNo,
+                        address: userData.address,
+                    }
                 }
                 return msg
             };
         }).catch(error => {
             let msg = {
-                message: "There was an error registering user"
+                response: false,
+                error: "There was an error registering user"
             }
             console.log(error)
             return msg
         });
     } else {
         let msg = {
-            message: "Email address already registered"
+            response: false,
+            error: "Email address is already registered"
         }
         return msg
     }
@@ -155,6 +167,8 @@ module.exports.getUser = (reqParams, isAdmin) => {
                 return msg
             } else if(isAdmin != null && isAdmin){
                 let data = userData;
+                data.password = "";
+                
                 return data;
             } else {
                 let data = {
@@ -179,7 +193,7 @@ module.exports.getUser = (reqParams, isAdmin) => {
     });
 };
 
-//Update a user //LAST PROGRESS...
+//Update a user
 module.exports.updateUser = (data) => {
     let updatedUser = {
         firstName: data.reqBody.firstName,
@@ -221,6 +235,7 @@ module.exports.updateUser = (data) => {
 
     //If the user is not an admin or userId didn't match the logged user
     let msg = Promise.resolve({
+        response: false,
         error: "You can only update your own information or you must be an admin to update this user!"
     })
     return msg.then(value => {

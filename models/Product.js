@@ -54,7 +54,12 @@ const productSchema = mongoose.Schema({
                 default: new Date()
             }
         }
-    ]
+    ],
+
+    avgRating: {
+        type: Number,
+        default: 0
+    }
 
     
 });

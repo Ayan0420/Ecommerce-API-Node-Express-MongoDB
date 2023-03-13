@@ -231,13 +231,34 @@ module.exports.addReview = async (data) => {
                 console.log("Error from adding review: " + error)
                 return msg;
             } else {
+                
+                //new review data
+                //to add the review data
                 let review = {
                     userId: data.userId,
                     rating: data.rating,
                     comment: data.comment   
                 }
                 productData.reviews.push(review);
-                productData.save()
+                
+                //for calculating the average rating
+                let reviewRatings = []; 
+                productData.reviews.forEach(review => {
+                    reviewRatings.push(review.rating)
+                })
+
+                //calculates the average ratings from the reviewRatings array
+                let avgRating = reviewRatings.reduce((x, y) => x + y) / reviewRatings.length
+                
+                console.log("productData.reviews: " + productData.reviews); //for testing
+                console.log("reviews Array: " + reviewRatings);//for testing
+                
+                //to add the calculated average
+                productData.avgRating = avgRating;
+
+                //to save changes to product data
+                productData.save();
+
                 let msg = {
                     message: "Product review added successfully!",
                     reviews: productData.reviews
@@ -252,27 +273,5 @@ module.exports.addReview = async (data) => {
             console.log("Error from adding review (catch): " + error)
             return msg;
         })
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    
+    }  
 }
