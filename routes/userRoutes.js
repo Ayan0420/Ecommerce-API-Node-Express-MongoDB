@@ -1,4 +1,3 @@
-const { verify } = require('crypto');
 const express = require('express');
 const router = express.Router();
 
@@ -49,15 +48,5 @@ router.post('/set-user-privileges', auth.verify, (req, res) => {
     userController.setUserAdmin(data).then(resultFromController => res.send(resultFromController));
 })
 
-//User add to cart
-router.post('/add-to-cart', auth.verify, (req, res) => {
-    const data = {
-        userId: auth.decode(req.headers.authorization).id,
-        productId: req.body.productId,
-        orderQuantity: req.body.quantity
-    };
-
-    userController.addToCart(data).then(resultFromController => res.send(resultFromController));
-});
 
 module.exports = router;

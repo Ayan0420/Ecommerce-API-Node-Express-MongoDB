@@ -10,11 +10,14 @@ const orderSchema = mongoose.Schema({
         {
             productId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Product"
+                ref: "Product",
+                required: [true, "User Id is required."]
+                
             },
 
             quantity: {
-                type: Number
+                type: Number,
+                required: [true, "Quantity is required."]
             },
 
             subTotal: {
@@ -30,6 +33,10 @@ const orderSchema = mongoose.Schema({
 
     status: {
         type: String,
+        enum: {
+            values: ["Pending", "Shipped", "Recieved", "Completed", "Cancelled", "Returned"],
+            message: '{VALUE} is not supported value for status it must be one of the following: "Pending", "Shipped", "Recieved", "Completed", "Cancelled", "Returned"'
+        },
         default: "Pending"
     },
 
