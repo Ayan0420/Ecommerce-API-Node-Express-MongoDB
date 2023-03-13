@@ -37,6 +37,11 @@ const userSchema = mongoose.Schema({
         default: false
     },
 
+    isSeller: {
+        type: Boolean,
+        default: false,
+    },
+
     cartItems: [
         {
             productId: {

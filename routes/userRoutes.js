@@ -70,5 +70,4 @@ router.post('/set-user-privileges', auth.verify, (req, res) => {
     userController.setUserAdmin(data).then(resultFromController => res.send(resultFromController));
 })
 
-
 module.exports = router;

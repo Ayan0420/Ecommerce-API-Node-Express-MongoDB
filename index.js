@@ -12,6 +12,7 @@ const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const sellerRoutes = require('./routes/sellerRoutes');
 
 // Database Connection
 
@@ -36,3 +37,4 @@ app.use("/users", userRoutes);
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
 app.use("/cart", cartRoutes);
+app.use("/sellers", sellerRoutes);

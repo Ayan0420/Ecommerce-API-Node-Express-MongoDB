@@ -3,6 +3,7 @@ const auth = require('../auth');
 //Database models
 const User = require('../models/User');
 const Product = require('../models/Product')
+const Seller = require('../models/Seller')
 
 
 //register a user
@@ -317,7 +318,7 @@ module.exports.setUserAdmin = (data) => {
             };
             console.log(error);
             return msg;
-        });;
+        });
     } 
     
     //If the user is not an admin
@@ -328,5 +329,6 @@ module.exports.setUserAdmin = (data) => {
         return value;
     })
 };
+
 
 
