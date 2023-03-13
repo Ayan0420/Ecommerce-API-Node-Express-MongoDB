@@ -175,3 +175,104 @@ module.exports.archiveProduct = (data) => {
         return value;
     }).catch(error => console.log(error));   
 };
+
+//Add product review
+module.exports.addReview = async (data) => {
+    //checks if the the user purchased the product returns an array of boolean
+    let productPurchased = await Order.find({userId: data.userId}).then(orderData => {
+        return orderData.map(item => {
+            return item.products.map(product => product.productId == data.productId);
+        });
+    });
+    //checks if there is at least 1 "true" in the productPurchase array. returns a boolean
+    let didUserPurchased = productPurchased.some(item => item.some(order => order === true));
+    
+    //retrieve all the reviews of the product. returns an array
+    let prouductReviews = await Product.find({_id: data.productId}).then (productData => {
+        return productData.map(item => {
+            return item.reviews
+        });
+    });
+
+    //checks if checks if the user already give a review. returns a boolean
+    let didUserGaveReview = prouductReviews.some(item => item.some(review => review.userId == data.userId));
+
+    console.log("prouductReviews: " + prouductReviews);//for testing
+    console.log("productPurchased: " + productPurchased) //for testing
+    console.log("didUserPurchased: " + didUserPurchased) //for testing
+    console.log("didUserGaveReview: " + didUserGaveReview);//for testing
+    
+    //checks if the user purchased the product before they can post a review
+    if(!didUserPurchased){
+        let msg = {
+            response: false,
+            error: "User did not purchase the product."
+        }
+        return msg;
+    
+    //checks if the user already gave the review of the product since they can only review a product once.
+    } else if(didUserGaveReview){
+        let msg = {
+            response: false,
+            error: "User already gave the product a review."
+        }
+        return msg;
+
+    } else {
+        // return "reached the else" //for testing
+
+        //Add product review in reviews array
+        return Product.findById(data.productId).then((productData, error) => {
+            if(error){
+                let msg = {
+                    response: false,
+                    error: "Product review was not added."
+                }
+                console.log("Error from adding review: " + error)
+                return msg;
+            } else {
+                let review = {
+                    userId: data.userId,
+                    rating: data.rating,
+                    comment: data.comment   
+                }
+                productData.reviews.push(review);
+                productData.save()
+                let msg = {
+                    message: "Product review added successfully!",
+                    reviews: productData.reviews
+                }
+                return msg;
+            }
+        }).catch(error => {
+            let msg = {
+                response: false,
+                error: "Product review was not added."
+            }
+            console.log("Error from adding review (catch): " + error)
+            return msg;
+        })
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+    
+}

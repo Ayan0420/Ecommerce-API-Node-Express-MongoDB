@@ -67,3 +67,64 @@ module.exports.addToCart = async (data) => {
         });
     }
 };
+
+//Retrieve all cart items
+module.exports.getAllCartItems = (data) => {
+    return User.findById(data.userId).then((userData, error) => {
+        if(error){
+            let msg = {
+                response: false,
+                error: "Error retrieving cart items.",
+                };
+            return msg;
+        } else if(userData.cartItems.length == 0){
+            let msg = {
+                    message: "Cart is empty.",
+                    };
+                return msg;
+        } else {
+            return userData.cartItems
+        }
+    }).catch(error => {
+        let msg = {
+            response: false,
+            error: "Error retrieving cart items.",
+        };
+        console.log(error);
+        return msg;
+    });
+};
+
+//Remove cart items
+module.exports.removeCartItems =  async (data) => {
+
+    //Promise all help use resolve each of the promise that are returned
+    let updatedCartItems = await Promise.all(data.cartItemId.map( async cartItem => {
+
+        return User.findByIdAndUpdate(data.userId, {
+                $pull: {
+                    cartItems: {_id: cartItem}
+                }
+            }, { new: true }).then((userData, error) => {
+            if(error){
+                console.log(error)
+            } else {
+                console.log("cartItems update success")
+                if(userData.cartItems.length == 0){
+                    return userData.cartItems = "empty"
+                } else {
+                    return userData.cartItems;
+                }
+            }
+        }); 
+        //this returns an array of promises so we need to wrap the whole array map with Promise.all
+        
+    })).then(result => result);
+    
+    console.log(updatedCartItems)
+    let msg = {
+        message: Promise.resolve("Cart item/s deleted"),
+        currentCart: updatedCartItems
+    }
+    return msg;
+};

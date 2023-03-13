@@ -51,5 +51,17 @@ router.put('/:productId/archive', auth.verify, (req, res) => {
     productController.archiveProduct(data).then(resultFromController => res.send(resultFromController));
 });
 
+//Add product review
+router.post('/:productId/add-review', auth.verify, (req, res) => {
+    const data = {
+        productId: req.params.productId,
+        userId: auth.decode(req.headers.authorization).id,
+        rating: req.body.rating,
+        comment: req.body.comment
+    }
+
+    productController.addReview(data).then(resultFromController => res.send(resultFromController));
+});
+
 
 module.exports = router;
