@@ -123,8 +123,8 @@ module.exports.removeCartItems =  async (data) => {
     
     console.log(updatedCartItems)
     let msg = {
-        message: Promise.resolve("Cart item/s deleted"),
-        currentCart: updatedCartItems
+        message: "Cart item/s deleted",
+        currentCart: updatedCartItems[updatedCartItems.length - 1] //to get the latest result
     }
     return msg;
 };

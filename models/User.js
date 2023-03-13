@@ -21,15 +21,20 @@ const userSchema = mongoose.Schema({
         type: String,
         required: [true, "Password is required!"],
     },
-
-    isAdmin: {
-        type: Boolean,
-        default: false
+    
+    address: {
+        type: String,
+        required: [true, "Address is required"]
     },
 
     mobileNo: {
         type: String,
         required: [true, "Mobile Number is required!"],
+    },
+
+    isAdmin: {
+        type: Boolean,
+        default: false
     },
 
     cartItems: [

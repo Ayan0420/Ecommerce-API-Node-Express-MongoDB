@@ -147,7 +147,13 @@ module.exports.getUser = (reqParams, isAdmin) => {
             console.log(error)
             return msg
         } else {
-            if(isAdmin != null && isAdmin){
+            if(userData == null){
+                let msg = {
+                    message: "User ID does not exist."
+                }
+                console.log(error)
+                return msg
+            } else if(isAdmin != null && isAdmin){
                 let data = userData;
                 return data;
             } else {
@@ -156,7 +162,8 @@ module.exports.getUser = (reqParams, isAdmin) => {
                     firstName: userData.firstName,
                     lastName: userData.lastName,
                     email: userData.email,
-                    mobileNo: userData.mobileNo
+                    mobileNo: userData.mobileNo,
+                    address: userData.address
                 }
                 return data;
             }
@@ -172,6 +179,93 @@ module.exports.getUser = (reqParams, isAdmin) => {
     });
 };
 
+//Update a user //LAST PROGRESS...
+module.exports.updateUser = (data) => {
+    let updatedUser = {
+        firstName: data.reqBody.firstName,
+        lastName: data.reqBody.lastName,
+        email: data.reqBody.email,
+        mobileNo: data.reqBody.mobileNo,
+        address: data.reqBody.address
+    }
+
+    //if the admin is the one updating, he can do so to all users, but if the user is not admin, the logged user must be equal to the user being updated for it to continue.
+    if(data.isAdmin || data.loggedUserId == data.userId){
+        return User.findByIdAndUpdate(data.userId, updatedUser).then((result, error) => {
+            if(error){
+                console.log("Error from finddeletedUser and delete: " + error);
+            } else {
+                let msg = {
+                    message: "User successfully updated!",
+                    updatedUserInfo: {
+                        id: result._id,
+                        firstName: updatedUser.firstName,
+                        lastName: updatedUser.lastName,
+                        email: updatedUser.email,
+                        mobileNo: updatedUser.mobileNo,
+                        address: updatedUser.address,
+
+                    }
+                };
+                return msg;
+            }
+        }).catch(error => {
+            let msg = {
+                response: false,
+                error: `User ID does not exist.`,
+            };
+            console.log(error);
+            return msg;
+        });
+    }
+
+    //If the user is not an admin or userId didn't match the logged user
+    let msg = Promise.resolve({
+        error: "You can only update your own information or you must be an admin to update this user!"
+    })
+    return msg.then(value => {
+        return value;
+    })
+}
+
+//Delete a user
+module.exports.deleteUser = (data) => {
+    if(data.isAdmin){
+        return User.findByIdAndDelete(data.userId).then((result, error) => {
+            if(error){
+                console.log("Error from find and delete: " + error);
+            } else if(result == null) {
+                let msg = {
+                    response: false,
+                    error: "User ID does not exist.",
+                    };
+                return msg;
+            } else {
+                let msg = {
+                    message: "User successfully deleted!",
+                    deletedUser: result
+                    };
+                return msg;
+            }
+        }).catch(error => {
+            let msg = {
+                response: false,
+                error: `User ID does not exist.`,
+            };
+            console.log(error);
+            return msg;
+        });
+    }
+
+    //If the user is not an admin
+    let msg = Promise.resolve({
+        error: "User must be an admin to access this!"
+    })
+    return msg.then(value => {
+        return value;
+    })
+};
+
 //Set user as admin
 module.exports.setUserAdmin = (data) => {
     if(data.isAdmin){
@@ -179,29 +273,27 @@ module.exports.setUserAdmin = (data) => {
         return User.findById(data.userId).then((userData, error) => {
             if(error){
                 console.log("Error from finding user data: " + error); 
+            } else if(userData == null) {
+                let msg = {
+                    response: false,
+                    error: "User ID does not exist.",
+                    };
+                return msg;
             } else {
-                if(userData == null){
-                    let msg = {
-                        response: false,
-                        error: "User ID does not exist.",
-                        };
-                    return msg;
-                } else {
-                    //reassign the value of the isAdmin from the indicated userPrivilege
-                    userData.isAdmin = data.userPrivilege;
-                    return userData.save().then((userData, error) => {
-                        if(error){
-                            console.log("Error from saving user data: " + error)
-                        } else {
-                            
-                            let msg = {
-                                response: true,
-                                message: `User ${userData.email} is set to ${userData.isAdmin == true ? "Admin" : "Non-admin"}.`,
-                                };
-                            return msg;
-                        }
-                    });
-                }
+                //reassign the value of the isAdmin from the indicated userPrivilege
+                userData.isAdmin = data.userPrivilege;
+                return userData.save().then((userData, error) => {
+                    if(error){
+                        console.log("Error from saving user data: " + error)
+                    } else {
+                        
+                        let msg = {
+                            response: true,
+                            message: `User ${userData.email} is set to ${userData.isAdmin == true ? "Admin" : "Non-admin"}.`,
+                            };
+                        return msg;
+                    }
+                }); 
             }
         }).catch(error => {
             let msg = {

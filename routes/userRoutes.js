@@ -37,6 +37,30 @@ router.get('/:userId/details', (req, res) => {
     userController.getUser(req.params, isAdmin).then(resultFromController => res.send(resultFromController));
 });
 
+//Update a user //LAST PROGRESS...
+router.put('/:userId/update', auth.verify, (req, res) => {
+
+
+    const data = {
+       userId: req.params.userId,
+       loggedUserId: auth.decode(req.headers.authorization).id,
+       isAdmin: auth.decode(req.headers.authorization).isAdmin,
+       reqBody: req.body
+    }
+    userController.updateUser(data).then(resultFromController => res.send(resultFromController));
+
+});
+
+//Delete a user
+router.delete('/delete', auth.verify, (req, res) => {
+    const data = {
+        userId: req.body.userId,
+        isAdmin: auth.decode(req.headers.authorization).isAdmin,
+    }
+
+    userController.deleteUser(data).then(resultFromController => res.send(resultFromController));
+});
+
 //Set User as admin
 router.post('/set-user-privileges', auth.verify, (req, res) => {
     const data = {
