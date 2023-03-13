@@ -21,4 +21,6 @@ router.get('/all', (req, res) => {
     sellerController.getAllSellers().then(resultFromController => res.send(resultFromController));
 });
 
+//Retrieve seller details //LAST PROGRESS
+
 module.exports = router;

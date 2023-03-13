@@ -149,10 +149,10 @@ module.exports.getAllUsers = (data) => {
     })
 };
 
-//Retrieve a user
-module.exports.getUser = (reqParams, isAdmin) => {
+//Retrieve user details
+module.exports.getUser = (userId) => {
 
-    return User.findById(reqParams.userId).then((userData, error) => {
+    return User.findById(userId).then((userData, error) => {
         if(error){
             let msg = {
                 message: "User ID does not exist."
@@ -166,22 +166,12 @@ module.exports.getUser = (reqParams, isAdmin) => {
                 }
                 console.log(error)
                 return msg
-            } else if(isAdmin != null && isAdmin){
+            } else {
                 let data = userData;
                 data.password = "";
                 
                 return data;
-            } else {
-                let data = {
-                    id: userData.id,
-                    firstName: userData.firstName,
-                    lastName: userData.lastName,
-                    email: userData.email,
-                    mobileNo: userData.mobileNo,
-                    address: userData.address
-                }
-                return data;
-            }
+            } 
 
             
         }

@@ -25,16 +25,11 @@ router.get('/all', auth.verify, (req, res) => {
 
 });
 
-//Retrieve a user
-router.get('/:userId/details', (req, res) => {
-    let isAdmin;
-    if(req.headers.authorization != null) {
-        isAdmin = auth.decode(req.headers.authorization).isAdmin
-    } else {
-        isAdmin = null
-    }
+//Retrieve user details
+router.get('/details', auth.verify, (req, res) => {
+    let userId = auth.decode(req.headers.authorization).id
     
-    userController.getUser(req.params, isAdmin).then(resultFromController => res.send(resultFromController));
+    userController.getUser(userId).then(resultFromController => res.send(resultFromController));
 });
 
 //Update a user

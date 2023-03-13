@@ -76,6 +76,17 @@ module.exports.switchUserToSeller = async (data) => {
 
 //Retrieve all sellers
 module.exports.getAllSellers = () => {
-    return Seller.find({}).populate({path: "userId", select: ["firstName", "lastName", "email", "address", "mobileNo"]}).then(sellerData => sellerData)
+    return Seller.find({}).populate({path: "userId", select: ["firstName", "lastName", "email", "address", "mobileNo"]}).then(sellerData => sellerData).catch(error => {
+        let msg = {
+            response: false,
+            error: "Failed retrieving all sellers.",
+        };
+        console.log(error);
+        return msg;
+    })
 };
 
+//Retrieve seller details //LAST PROGRESS
+module.exports.getSeller = (data) => {
+
+}
