@@ -32,6 +32,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
 
+//Hello World
+app.get('/', (req, res) => res.send("Hello world!"))
+
 // Main Routes
 app.use("/users", userRoutes);
 app.use("/products", productRoutes);
