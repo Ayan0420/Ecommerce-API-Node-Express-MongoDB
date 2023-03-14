@@ -76,7 +76,17 @@ module.exports.switchUserToSeller = async (data) => {
 
 //Retrieve all sellers
 module.exports.getAllSellers = () => {
-    return Seller.find({}).populate({path: "userId", select: ["firstName", "lastName", "email", "address", "mobileNo"]}).then(sellerData => sellerData).catch(error => {
+    return Seller.find({}).populate({path: "products", select:["_id", "productName", "price", "reviews"]}).then(sellerData => {
+        return sellerData.map(data => {
+            return {
+                id: data._id,
+                sellerName: data.sellerName,
+                products: data.products,
+                avgRating: data.avgRating,
+                createdOn: data.createdOn
+            }
+          });
+    }).catch(error => {
         let msg = {
             response: false,
             error: "Failed retrieving all sellers.",
@@ -86,7 +96,28 @@ module.exports.getAllSellers = () => {
     })
 };
 
-//Retrieve seller details //LAST PROGRESS
-module.exports.getSeller = (data) => {
+//Retrieve seller details
+module.exports.getSeller = (reqParams, isAdmin) => {
+    return Seller.findById(reqParams.sellerId).populate({path: "userId", select:["_id", "firstName", "lastName", "email", "address", "mobileNo", "isAdmin", "isSeller"]}).populate({path: "products", select:["_id", "productName", "price", "reviews"]}).then(sellerData => {
+        //lets the admin get all the info of the seller
+        if(isAdmin != null && isAdmin){
+            return sellerData;
+        } else {
+            return {
+                sellerName: sellerData.sellerName,
+                products: sellerData.products,
+                avgRating: sellerData.avgRating,
+                createdOn: sellerData.createdOn
+            }
+        }
+        
+    }).catch(error => {
+        let msg = {
+            response: false,
+            error: "Failed retrieving seller details.",
+        };
+        console.log(error);
+        return msg;
+    })
 
 }

@@ -173,7 +173,6 @@ module.exports.getUser = (userId) => {
                 return data;
             } 
 
-            
         }
     }).catch(error => {
         let msg = {

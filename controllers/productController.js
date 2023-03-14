@@ -1,9 +1,10 @@
 //Database models
 const Product = require('../models/Product');
 const Order = require('../models/Order')
+const Seller = require('../models/Seller')
 
-//Add a product
-module.exports.addProduct = (data) => {
+//Add a product as admin
+module.exports.addProductAsAdmin = (data) => {
     console.log(data.isAdmin)
     
     if(data.isAdmin){
@@ -19,15 +20,100 @@ module.exports.addProduct = (data) => {
                 return false 
             } else {
                 let msg = {
-                    message: `Product successfully added: ${product.productName}`
+                    message: `Product successfully added: ${product.productName} productId: ${product._id}`
                 }
                 return msg
             }
         }).catch(error => console.log(error)); 
     } 
+
     //If the user is not an admin
     let msg = Promise.resolve({
         error: "User must be an admin to access this!"
+    })
+    return msg.then(value => {
+        return value;
+    })
+};
+
+//Add a product as seller
+module.exports.addProductAsSeller = async (data) => {
+
+    //checks if user is a seller and then returns the seller info
+    let sellerData = await Seller.find({userId: data.userId}).then((sellerData, error) => {
+        if(error){
+            console.log("Error from obtaining seller data" + error);
+        } else if(sellerData.length == 0){
+            let data  = {
+                isSeller: false
+            }
+            return data
+        } else {
+            let data = {
+                isSeller: true,
+                //since find() returns an array, we only need the first item of the array
+                data: sellerData[0]
+            }
+            return data
+        }
+    }).catch(error => {
+        let msg = {
+            response: false,
+            error: "Product review was not added."
+        }
+        console.log("Error from sellerData var (catch): " + error)
+        return msg;
+    });
+    
+    //Adding the product
+    if(sellerData.isSeller){
+        let newProduct = new Product({
+            productName: data.product.productName,
+            description: data.product.description,
+            price: data.product.price,
+            stocks: data.product.stocks,
+            author: {
+                authorId: sellerData.data._id,
+                authorName: sellerData.data.sellerName
+            }
+        });
+
+        return newProduct.save().then((product, error) => {
+            if(error){
+                return false 
+            } else {
+
+                //Add the product to the seller product list
+                Seller.findById(sellerData.data._id).then(result => {
+                    result.products.push(product._id);
+                    result.save()
+                }).catch(error => {
+                    let msg = {
+                        response: false,
+                        error: "Product was not added to the seller product list."
+                    }
+                    console.log("Error from adding product to seller products(catch): " + error)
+                    return msg;
+                });
+
+                let msg = {
+                    message: `Product successfully added: ${product.productName} productId: ${product._id}`
+                }
+                return msg
+            }
+        }).catch(error => {
+            let msg = {
+                response: false,
+                error: "Product was not added."
+            }
+            console.log("Error from saving new seller product(catch): " + error)
+            return msg;
+        });; 
+    } 
+
+    //If the user is not an admin
+    let msg = Promise.resolve({
+        error: "User must be a seller to access this!"
     })
     return msg.then(value => {
         return value;
@@ -66,7 +152,7 @@ module.exports.getAllActiveProducts = () => {
 
 //Retrieve a product
 module.exports.getProduct = (reqParams) => {
-    return Product.findById(reqParams.productId).then((result, error) => {
+    return Product.findById(reqParams.productId).populate({path: "reviews", populate: {path: "userId", select: ["firstName", "lastName"]}}).then((result, error) => {
         if(error){
             console.log(error);
         } else {
@@ -150,6 +236,13 @@ module.exports.archiveProduct = (data) => {
                     response: false,
                     error: "Product was not archived."
                 }
+                return msg;
+            } else if(course == null){
+                let msg = {
+                    response: false,
+                    error: `Product ID does not exist.`,
+                };
+                console.log(error);
                 return msg;
             } else {
                 let msg = {

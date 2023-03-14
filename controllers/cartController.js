@@ -116,7 +116,14 @@ module.exports.removeCartItems =  async (data) => {
                     return userData.cartItems;
                 }
             }
-        }); 
+        }).catch(error => {
+            let msg = {
+                response: false,
+                error: "Error deleting cart items. Make sure that you are logged in properly.   ",
+            };
+            console.log(error);
+            return msg;
+        });; 
         //this returns an array of promises so we need to wrap the whole array map with Promise.all
         
     })).then(result => result);

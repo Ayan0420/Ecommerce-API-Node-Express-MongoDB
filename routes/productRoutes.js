@@ -5,14 +5,24 @@ const router = express.Router();
 const auth = require('../auth')
 const productController = require('../controllers/productController');
 
-//Add products
-router.post('/', auth.verify, (req, res) => {
+//Add products as admin
+router.post('/add-product-admin', auth.verify, (req, res) => {
     const data = {
         product: req.body,
         isAdmin: auth.decode(req.headers.authorization).isAdmin
     };
     
-    productController.addProduct(data).then(resultFromController => res.send(resultFromController));
+    productController.addProductAsAdmin(data).then(resultFromController => res.send(resultFromController));
+});
+
+//Add products as seller
+router.post('/add-product-seller', auth.verify, (req, res) => {
+    const data = {
+        product: req.body,
+        userId: auth.decode(req.headers.authorization).id
+    };
+    console.log("req.body.productName: " + req.body.productName)
+    productController.addProductAsSeller(data).then(resultFromController => res.send(resultFromController));
 });
 
 //Retrieve all products

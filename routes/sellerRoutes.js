@@ -22,5 +22,16 @@ router.get('/all', (req, res) => {
 });
 
 //Retrieve seller details //LAST PROGRESS
+router.get('/:sellerId/details', (req, res) => {
+
+    let isAdmin;
+    if(req.headers.authorization != null) {
+        isAdmin = auth.decode(req.headers.authorization).isAdmin
+    } else {
+        isAdmin = null
+    }
+    
+    sellerController.getSeller(req.params, isAdmin).then(resultFromController => res.send(resultFromController));
+});
 
 module.exports = router;

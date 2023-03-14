@@ -26,6 +26,19 @@ const productSchema = mongoose.Schema({
         default: true
     },
 
+    author: {
+            authorId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+                default: null
+            },
+
+            authorName: {
+                type: String,
+                default: "MyOnlineShop.com"
+            }
+    },
+
     createdOn: {
         type: Date,
         default: new Date()
