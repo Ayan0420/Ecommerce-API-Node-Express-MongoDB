@@ -7,6 +7,14 @@ const cartController = require('../controllers/cartController');
 
 //Add to cart a product
 router.post('/add-to-cart', auth.verify, (req, res) => {
+    if(auth.decode(req.headers.authorization).isAdmin){
+        let msg = {
+            response: false,
+            error: "Admin is not allowed to place an order"
+        }
+        res.send(msg)
+    }
+    
     const data = {
         userId: auth.decode(req.headers.authorization).id,
         productId: req.body.productId,

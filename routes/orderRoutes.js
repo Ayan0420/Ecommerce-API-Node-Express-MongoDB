@@ -7,6 +7,15 @@ const orderController = require('../controllers/orderController');
 
 //Create order (this code will be refactored later when we add our cart)
 router.post('/check-out', auth.verify, (req, res) => {
+
+    if(auth.decode(req.headers.authorization).isAdmin){
+        let msg = {
+            response: false,
+            error: "Admin is not allowed to place an order"
+        }
+        res.send(msg)
+    }
+
     const data = {
         //if we check out our cart
         cartItemId: req.body.cartItemId,
