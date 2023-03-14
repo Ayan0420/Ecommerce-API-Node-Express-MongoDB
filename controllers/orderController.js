@@ -28,7 +28,9 @@ module.exports.createOrder = async (data) => {
                         return false
                     }
                 }
-            }).catch(error => console.log("Error from price var(catch): " + error));
+            }).catch(error => {
+                console.log("Error from price var(catch): " + error)
+            });
     
             if(productData == false){
                 //if the price variable return false, it will reassign the value of the orderedProductArray to null and break out of the loop. This will be used for validation later in the code
