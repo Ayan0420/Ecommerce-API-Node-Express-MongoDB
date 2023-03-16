@@ -61,6 +61,16 @@ router.put('/:productId/archive', auth.verify, (req, res) => {
     productController.archiveProduct(data).then(resultFromController => res.send(resultFromController));
 });
 
+//Activate product
+router.put('/:productId/activate', auth.verify, (req, res) => {
+    const data = {
+        productId: req.params.productId,
+        isAdmin: auth.decode(req.headers.authorization).isAdmin
+    };
+
+    productController.activateProduct(data).then(resultFromController => res.send(resultFromController));
+});
+
 //Add product review
 router.post('/:productId/add-review', auth.verify, (req, res) => {
     const data = {

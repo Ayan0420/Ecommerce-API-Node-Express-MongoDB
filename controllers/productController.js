@@ -230,14 +230,14 @@ module.exports.archiveProduct = (data) => {
     };
     //update the isActive property to false only if the user is admin
     if(data.isAdmin){
-        return Product.findByIdAndUpdate(data.productId, updatedActiveField).then((course, error) => {
+        return Product.findByIdAndUpdate(data.productId, updatedActiveField).then((productData, error) => {
             if(error){
                 let msg = {
                     response: false,
                     error: "Product was not archived."
                 }
                 return msg;
-            } else if(course == null){
+            } else if(productData == null){
                 let msg = {
                     response: false,
                     error: `Product ID does not exist.`,
@@ -248,6 +248,59 @@ module.exports.archiveProduct = (data) => {
                 let msg = {
                     response: true,
                     message: "Product successfully archived!"
+                }
+                return msg;
+            }
+        }).catch(error => {
+            let msg = {
+                response: false,
+                error: `Product ID does not exist.`,
+            };
+            console.log(error);
+            return msg;
+        });
+    }
+    //If the user is not an admin
+    let msg = Promise.resolve({
+        error: "User must be an admin to access this!"
+    });
+    return msg.then(value => {
+        return value;
+    }).catch(error => console.log(error));   
+};
+
+//Archive product
+module.exports.activateProduct = (data) => {
+    let updatedActiveField = {
+        isActive: true
+    };
+    //update the isActive property to false only if the user is admin
+    if(data.isAdmin){
+        return Product.findByIdAndUpdate(data.productId, updatedActiveField).then((productData, error) => {
+            if(error){
+                let msg = {
+                    response: false,
+                    error: "Product was not archived."
+                }
+                return msg;
+            } else if(productData == null){
+                let msg = {
+                    response: false,
+                    error: `Product ID does not exist.`,
+                };
+                console.log(error);
+                return msg;
+            } else if(productData.stocks == 0){
+                let msg = {
+                    response: false,
+                    error: `Product does not have stocks to be activated.`,
+                };
+                console.log(error);
+                return msg;
+            } else {
+                let msg = {
+                    response: true,
+                    message: "Product successfully activated!"
                 }
                 return msg;
             }
