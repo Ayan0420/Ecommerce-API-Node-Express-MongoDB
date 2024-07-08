@@ -1,4 +1,4 @@
-# Zuitt Coding Bootcamp Capstone 2: E-commerce API
+# Sample E-commerce API Created with NodeJS, ExpressJS, and MongoDB
 
 ## Routes Requests Documentation
 
