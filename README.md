@@ -1,383 +1,298 @@
-**Zuitt Coding Bootcamp Capstone 2: E-commerce API**
+# Zuitt Coding Bootcamp Capstone 2: E-commerce API
 
-**Routes Requests Documentation**
+## Routes Requests Documentation
 
-Created by: Clark
+**Created by:** Clark
 
-**To install:**
+### Installation
 
-`npm install`
+```sh
+npm install
+```
 
-**To run dev server:**
+### Running the Development Server
 
-`npm run dev`
+```sh
+npm run dev
+```
 
+## USER ROUTES
 
+### 1. Register a User (POST) 
+**Endpoint:** `{{url}}/users/register`
 
-**USER ROUTES**
+**Request:**
+- **Request Body Fields:**
+  - `firstName`
+  - `lastName`
+  - `email`
+  - `mobileNo`
+  - `address`
+  - `password`
 
-1\. Register a user(POST) {{url}}/users/register
+**Response:**
+- Returns the registered user info
 
->Request:
+### 2. Login User (POST) 
+**Endpoint:** `{{url}}/users/login`
 
->request body fields:
+**Request:**
+- **Request Body Fields:**
+  - `email`
+  - `password`
 
--   firstName
+**Response:**
+- Returns an access token
 
--   lastName
+### 3. Retrieve User Details (GET) 
+**Endpoint:** `{{url}}/users/details`
 
--   email
+**Request:**
+- Requires authentication
 
--   mobileNo
+**Response:**
+- Returns the logged user's info
 
--   address
+### 4. Retrieve All Users (GET) 
+**Endpoint:** `{{url}}/users/all`
 
--   password
+**Request:**
+- Requires authentication and admin privileges
 
->Response:
+**Response:**
+- Returns all users and their info
 
->returns sa the registered user info
+### 5. Update User (PUT) 
+**Endpoint:** `{{url}}/users/:userId/update`
 
-2\. Login user(POST) {{url}}/users/login
+**Request:**
+- Requires authentication and admin privileges
+- **Request Body Fields (at least one of the following):**
+  - `firstName`
+  - `lastName`
+  - `email`
+  - `mobileNo`
+  - `address`
 
-> Request:
->
-> request body fields:
+**Response:**
+- Returns updated user info
 
--   email
+### 6. Delete User (DELETE) 
+**Endpoint:** `{{url}}/users/delete`
 
--   password
+**Request:**
+- Requires authentication and admin privileges
+- **Request Body:**
+  - `userId`
 
-> Response:
->
-> it will return an access token
+**Response:**
+- Returns deleted user info
 
-3\. Retrieve user details(GET) {{url}}/users/details
+### 7. Set User Privileges (POST) 
+**Endpoint:** `{{url}}/users/set-user-privileges`
 
-> Request:
->
-> requires auth
->
-> Response:
->
-> it will return the logged user's info
+**Request:**
+- Requires authentication and admin privileges
+- **Request Body:**
+  - `userId`
+  - `isAdmin`
 
-4\. Retrieve all users(GET) {{url}}/users/all
+**Response:**
+- Returns updated user info
 
-> Request:
->
-> requires auth and needs to be admin
->
-> Response:
->
-> returns all the users and their info
+## PRODUCTS ROUTES
 
-5\. Update users(PUT) {{url}}/users/:userId/update
+### 1. Add Product as Admin (POST) 
+**Endpoint:** `{{url}}/products/add-product-admin`
 
-> Request:
->
-> requires auth and needs to be admin
->
-> request body fields (at least one of the following):
+**Request:**
+- Requires authentication and admin privileges
+- **Request Body:**
+  - `productName`
+  - `description`
+  - `price`
+  - `stocks`
 
--   firstName
+**Response:**
+- Returns added product name and ID
 
--   lastName
+### 2. Add Product as Seller (POST) 
+**Endpoint:** `{{url}}/products/add-product-seller`
 
--   email
+**Request:**
+- Requires authentication and seller privileges
+- **Request Body:**
+  - `productName`
+  - `description`
+  - `price`
+  - `stocks`
 
--   mobileNo
+**Response:**
+- Returns added product name and ID
 
--   address
+### 3. Retrieve All Products (GET) 
+**Endpoint:** `{{url}}/products/all`
 
-> Response:
->
-> returns updated users and their info
+**Request:**
+- None
 
-6\. Delete user(DELETE) {{url}}/users/delete
+**Response:**
+- Returns all products
 
-> Request:
->
-> requires auth and needs to be admin
->
-> request body:
+### 4. Retrieve All Active Products (GET) 
+**Endpoint:** `{{url}}/products/active`
 
--   userId
+**Request:**
+- None
 
-> Response:
->
-> returns deleted users
+**Response:**
+- Returns active products
 
-7\. Set user privilege(POST) {{url}}/users/set-user-privileges
+### 5. Retrieve a Product (GET) 
+**Endpoint:** `{{url}}/products/:productId/details`
 
-> Request:
->
-> requires auth and needs to be admin
->
-> request body:
+**Request:**
+- None
 
--   userId
+**Response:**
+- Returns product details
 
--   isAdmin
+### 6. Update a Product (PUT) 
+**Endpoint:** `{{url}}/products/:productId/update`
 
-> Response:
->
-> returns updated user
+**Request:**
+- Requires authentication and admin privileges
+- **Request Body (at least one of the following):**
+  - `productName`
+  - `description`
+  - `price`
+  - `stocks`
 
-**PRODUCTS ROUTES**
+**Response:**
+- Returns updated product info
 
-1\. Add product as admin(POST) {{url}}/products/add-product-admin
+### 7. Archive Product (PUT) 
+**Endpoint:** `{{url}}/products/:productId/archive`
 
-> Request:
->
-> requires auth and needs to be admin
->
-> request body:
+**Request:**
+- Requires authentication and admin privileges
 
--   productName
+**Response:**
+- Returns archived product name and ID
 
--   description
+### 8. Add Review to a Product (POST) 
+**Endpoint:** `{{url}}/products/:productId/add-review`
 
--   price
+**Request:**
+- Requires authentication
+- Must have bought the product and haven't posted any reviews of the product yet
+- **Request Body:**
+  - `rating`
+  - `comment`
 
--   stocks
+**Response:**
+- Returns posted review
 
-> Response:
->
-> returns added product name and id
+## CART ROUTES
 
-2\. Add product as admin(POST) {{url}}/products/add-product-seller
+### 1. Add Item to Cart (POST) 
+**Endpoint:** `{{url}}/cart/add-to-cart`
 
-> Request:
->
-> requires auth and needs to be a seller
->
-> request body:
+**Request:**
+- Requires authentication
+- **Request Body:**
+  - `productId`
+  - `quantity`
 
--   productName
+**Response:**
+- Returns added item in the cart
 
--   description
+### 2. Retrieve Cart Items (GET) 
+**Endpoint:** `{{url}}/cart/my-cart`
 
--   price
+**Request:**
+- Requires authentication
 
--   stocks
+**Response:**
+- Returns all items in the cart
 
-> Response:
->
-> returns added product name and id
+### 3. Remove Cart Items (PUT) 
+**Endpoint:** `{{url}}/cart/remove-cart-items`
 
-3\. Retrieve all products(GET) {{url}}/products/all
+**Request:**
+- Requires authentication
+- **Request Body:**
+  - `cartItem` - Array of cart item IDs
 
-> Request:
->
-> none
->
-> Response:
->
-> returns all products
+**Response:**
+- Returns current cart items
 
-4\. Retrieve all active products(GET) {{url}}/products/active
+## ORDER ROUTES
 
-> Request:
->
-> none
->
-> Response:
->
-> returns active products
+### 1. Check Out Products (POST) 
+**Endpoint:** `{{url}}/orders/check-out`
 
-5\. Retrieve a product(GET) {{url}}/products/:productId/details
+**Request:**
+- Requires authentication
+- **Request Body:** (Two options)
+  - **Option 1:** Check out items from cart
+    - `cartItemId` - Array of cart item IDs
+  - **Option 2:** Directly check out from the product page
+    - `productId` - Array of product IDs
+    - `quantity` - Array of quantities
+  - *Note: Both arrays must match in length and each index must correspond to a single check out*
 
-> Request:
->
-> none
->
-> Response:
->
-> returns active products
+**Response:**
+- Returns ordered products
 
-6\. Update a product(PUT) {{url}}/products/:productId/update
+### 2. Retrieve Ordered Products (GET) 
+**Endpoint:** `{{url}}/orders/my-orders`
 
-> Request:
->
-> requires auth and needs to be admin
->
-> request body (at lease one of the following):
+**Request:**
+- Requires authentication
 
--   productName
+**Response:**
+- Returns all ordered products of the logged user
 
--   description
+### 3. Retrieve All Orders (GET) 
+**Endpoint:** `{{url}}/orders/all`
 
--   price
+**Request:**
+- Requires authentication and admin privileges
 
--   stocks
+**Response:**
+- Returns all ordered products from all users
 
-> Response:
->
-> returns updated product
+## SELLER ROUTES
 
-7\. Archive product(PUT) {{url}}/products/:productId/archive
+### 1. Register Seller (POST) 
+**Endpoint:** `{{url}}/sellers/register-seller`
 
-> Request:
->
-> requires auth and needs to be admin
->
-> Response:
->
-> returns added product name and id
+**Request:**
+- Requires authentication and admin privileges
+- **Request Body:**
+  - `userId`
+  - `sellerName`
 
-8\. Update a product(POST) {{url}}/products/:productId/add-review
+**Response:**
+- Returns registered seller info
 
-> Request:
->
-> requires auth
->
-> must have bought the product and haven't posted any reviews of the
-> product yet
->
-> request body:
+### 2. Retrieve All Sellers (GET) 
+**Endpoint:** `{{url}}/sellers/all`
 
--   rating
+**Request:**
+- None
 
--   comment
+**Response:**
+- Returns all sellers
 
-> Response:
->
-> returns posted review
+### 3. Retrieve Seller Details (GET) 
+**Endpoint:** `{{url}}/sellers/:sellerId/details`
 
-**CART ROUTES**
+**Request:**
+- None
+- \[OPTIONAL\] Requires authentication and admin privileges to get complete information
 
-1\. Add item to cart(POST) {{url}}/cart/add-to-cart
+**Response:**
+- Returns seller info
 
-> Request:
->
-> requires auth
->
-> request body:
-
--   productId
-
--   quantity
-
-> Response:
->
-> returns carted item
-
-2\. Retrieve cart items(GET) {{url}}/cart/my-cart
-
-> Request:
->
-> requires auth
->
-> Response:
->
-> returns all carted items
-
-3\. Remove cart items(PUT) {{url}}/cart/remove-cart-items
-
-> Request:
->
-> requires auth
->
-> request body:
-
--   cartItem -- Array of cart item ids
-
-> Response:
->
-> returns current cart items
-
-**ORDER ROUTES**
-
-1.Check out products(POST) {{url}}/orders/check-out
-
-> Request:
->
-> requires auth
->
-> request body:
->
-> There are two options:
->
-> Option 1 -- if you check out items from cart
->
-> Option 2 -- if you directly check out from the product page
->
-> Option 1 request body:
-
--   cartItemId -- Array of cart item ids
-
-Option 2 request body:
-
--   productId -- Array of product ids
-
--   quantity -- Array of quantities
-
-*note: both arrays must match in length*
-
-*each index must correspond to a single check out*
-
-> Response:
->
-> returns ordered products
-
-2.Retrieve ordered products(GET) {{url}}/orders/check-out
-
-> Request:
->
-> requires auth
->
-> Response:
->
-> returns all ordered products of the logged user
-
-3.Retrieve ordered products(GET) {{url}}/orders/check-out
-
-> Request:
->
-> requires auth and must be an admin
->
-> Response:
->
-> returns all ordered products from all users
-
-**SELLER ROUTES**
-
-1\. Set user as Seller(POST) {{url}}/sellers/register-seller
-
-> Request:
->
-> requires auth and needs to be admin
->
-> request body:
-
--   userId
-
--   sellerName
-
-> Response:
->
-> returns registered seller
-
-2\. Retrieve all seller(GET) {{url}}/sellers/all
-
-> Request:
->
-> none
->
-> Response:
->
-> returns all seller
-
-3\. Retrieve seller details(GET) {{url}}/sellers/:sellerId/details
-
-> Request:
->
-> requires none
->
-> \[OPTIONAL\] requires auth and needs to be admin to get the complete
-> information
->
-> Response:
->
-> returns seller info
