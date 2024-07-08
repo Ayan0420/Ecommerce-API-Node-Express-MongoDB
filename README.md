@@ -1,9 +1,5 @@
 # Sample E-commerce API Created with NodeJS, ExpressJS, and MongoDB
 
-## Routes Requests Documentation
-
-**Created by:** Clark
-
 ### Installation
 
 ```sh
